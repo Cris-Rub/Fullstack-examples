@@ -1,0 +1,19 @@
+{
+    "books": [
+        {
+            "id": 1,
+            "title": "Javascript Library",
+            "author": "Soy un autor"
+        },
+        {
+            "id": 2,
+            "title": "Matlab en la ciencia",
+            "author": "Soy un autor 2"
+        },
+        {
+            "id": 3,
+            "title": "C en Library",
+            "author": "Soy un autor 3"
+        }
+    ]
+}
