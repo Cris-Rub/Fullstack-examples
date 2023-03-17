@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { LOGIN } from '../graphql/Queries';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { userState } from '../config/UserState';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isValid, setIsValid] = useState('');
+  const setUserSesion = userState((state) => state.addSesion);
+  const verifySesion = userState((state) => state.sesion);
+  console.log(verifySesion);
 
   const [login, {data, error}] = useLazyQuery(LOGIN, {
     variables: {email, password} // PARAMETROS QUE NECESITA PARA FUNCIONAR
@@ -21,7 +26,8 @@ const Login = () => {
                 var data = response.data.login;
                 console.log(data);
                 if(data){
-                    Navigate('/home');
+                    setUserSesion({isValid: true});
+                    navigate('/home');
                 } else{
                     setIsValid('Invalid credentials');
                 }
