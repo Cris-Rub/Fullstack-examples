@@ -12,13 +12,7 @@ const Mutation = {
         // return await Employee.findByIdAndUpdate(_id, {name, age, position, code}, {new: true}); // Informacion que puede ser utilizada para actualizar
     },
     async deleteEmployee(_, { _id}){
-        const employee = await Employee.findById(_id);
-        console.log(employee);
-        if(!employee){
-            //new Error('Employee not found');
-            return [];
-        }
-        await Employee.findByIdAndRemove(_id);
+        await Employee.findByIdAndDelete(_id);
         return await Employee.find();
     }
 }

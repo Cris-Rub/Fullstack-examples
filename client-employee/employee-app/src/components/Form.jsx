@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CREATE_EMPLOYEE } from '../graphql/Mutation';
+import { CREATE_EMPLOYEE, UPDATE_EMPLOYEE } from '../graphql/Mutation';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -13,16 +13,19 @@ const Form = () => {
 	const [age, setAge] = useState( "" )
 	const [position, setPosition] = useState( "" )
 	const [code, setCode] = useState( "" );
+    const [_id, setId] = useState();
 
     /* VARIABLES DE ESTADO USELOCATION */
     const currentState = location.state;
+    const employeeId = currentState && currentState !== undefined ? currentState._id : _id;
     const employeeName = currentState && currentState !== undefined ? currentState.name : name;
     const employeeAge = currentState && currentState !== undefined ? currentState.age : age;
     const employeePosition = currentState && currentState !== undefined ? currentState.position : position;
     const employeeCode = currentState && currentState !== undefined ? currentState.code : code;
 
     /* AREA DE MUTACIONES */
-	const [createEmployee] = useMutation(CREATE_EMPLOYEE, {})
+	const [createEmployee] = useMutation(CREATE_EMPLOYEE, {});
+    const [updateEmployee] = useMutation(UPDATE_EMPLOYEE, {});
 
     useEffect(() => {
         if(currentState){
@@ -30,15 +33,20 @@ const Form = () => {
             setAge(employeeAge);
             setPosition(employeePosition);
             setCode(employeeCode);
+            setId(employeeId);
         }
     }, [])
   return (
     <form onSubmit={async ( event ) => {
         event.preventDefault()
+        if(currentState){
+            await updateEmployee({variables: {_id, name, age, position, code}});
+        }else{
+            await createEmployee( {
+               variables : {name,age,position,code}
+           });
+        }
         //Llamar al mutation para crear el employee
-        await createEmployee( {
-           variables : {name,age,position,code}
-       })
         //Redirigir al usuario hacia /home
        navigate('/home')
     }}
@@ -126,7 +134,7 @@ const Form = () => {
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-            Create Employee
+            {currentState ? 'Update Employee' : 'Create Employee'}
         </button>
     </form>
   )

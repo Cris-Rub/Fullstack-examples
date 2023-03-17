@@ -21,7 +21,7 @@ type User {
 }
 
 type Mutation {
-    createEmployee(name: String, age: Int, position: String, code: String): [Employee]
+    createEmployee(name: String, age: Int, position: String, code: String): Employee
     updateEmployee(_id: ID, name: String, age: Int, position: String, code: String): Employee
     #DELETE
     deleteEmployee(_id: ID): [Employee]
